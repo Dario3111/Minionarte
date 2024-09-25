@@ -1,26 +1,27 @@
-import connection_db from "../database/connectionDb.js";
-import { DataTypes } from "sequelize";
+import connection_db from '../database/connection_db.js';
+import { DataTypes } from 'sequelize';
 
-const bookModel = connection_db.define(
-  "Book",
+const MinionModel = connection_db.define(
+  'Meme',  // Nombre del modelo, que corresponde a la tabla 'memes'
   {
-    // Model attributes are defined here
-    bookTitle: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    id: {
+      type: DataTypes.BIGINT.UNSIGNED,
+      autoIncrement: true,
+      primaryKey: true,
     },
-    authorName: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    description: {
+      type: DataTypes.STRING(200),
+      allowNull: false,  // Permite que el campo sea opcional
     },
-    bookSinopsis: {
-      type: DataTypes.STRING,
-      allowNull: false,
+    imagen: {
+      type: DataTypes.STRING(2083),  // Tamaño máximo de URL para imagen
+      allowNull: false,  // Permite que el campo sea opcional
     },
   },
   {
-    timestamps: false,
+    timestamps: false,  // Deshabilita los timestamps automáticos
+    tableName: 'memes',  // Especifica explícitamente el nombre de la tabla
   }
 );
 
-export default bookModel;
+export default MinionModel;
