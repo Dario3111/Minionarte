@@ -1,6 +1,10 @@
 import connection_db from "./database/connection_db.js";
 import MinionModel from "./models/minionModels.js";  // Asegúrate de usar el nombre correcto del modelo
 
+const express = require('express');
+const app = express();
+const port = 3000;
+
 try {
   await connection_db.authenticate();
   console.log("La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀");
