@@ -1,12 +1,32 @@
-import connection_db from "./database/connectionDb.js";
-import bookModel from "./models/bookModel.js";
+import connection_db from "./database/connection_db.js";
+import MinionModels from "./models/minionModels.js";
+import express from "express";
+import cors from "cors";
+import router from "./routers/router.js";
+
+const app = express();
+app.use(cors());
+app.use(express.json());
+
+app.get("/", (req, res) => {
+  res.send("Ole Ole lo caracole'");
+});
+
+
+app.use("/", router);
 
 try {
   await connection_db.authenticate();
-  console.log("Connection has been established successfully.");
+  console.log("La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀");
 
-  await bookModel.sync({ force: true });
-  console.log("The table for the User model was just (re)created!");
+  //sincroniza el modelo con la base de datos sin recrear la tabla
+  await MinionModels.sync({alter:false});  // O usa sync({ alter: true }) si esperas cambios en el modelo
+  console.log("La tabla está sincronizada con el modelo existente.(❁´◡`❁)");
+
 } catch (error) {
-  console.error("Unable to connect to the database:", error);
+  console.error("No se pudo conectar a la base de datosㄟ(≧◇≦)ㄏ:", error);
 }
+
+app.listen(8000, () => {
+  console.log("you've succesfully connected to http://localhost:8000  well done! ( •̀ ω •́ )✧");
+});
