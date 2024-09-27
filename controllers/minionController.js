@@ -15,14 +15,14 @@ export const getAllMemes = async(req, res) => {
 
 //Crear un nuevo meme
 export const createMeme = async(req, res) => {
-    const {title, description, imagen} = req.body;
+    const {description, imagen, title} = req.body;
     try {
         //Validación de los campos
         if (!description || !imagen || !title){
             return res.status(400).json({error: "Todos los campos son requeridos"})
         }
         
-        const newMeme = await MinionModel.create({ title, description, imagen});
+        const newMeme = await MinionModel.create({ description, imagen, title});
         res.status(201).json(newMeme); // 201. respuesta que fue creado con éxito.
 
     } catch (error) {
