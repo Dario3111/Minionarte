@@ -1,5 +1,5 @@
 import express from "express";
-import {getAllMemes,createMeme, getMemeById} from "../controllers/minionController.js";
+import {getAllMemes,createMeme, getMemeById, deleteMeme} from "../controllers/minionController.js";
 
 
 
