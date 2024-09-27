@@ -1,5 +1,25 @@
 import MinionModel from "../models/minionModels.js";
 
+//Crear un nuevo meme
+export const createMeme = async(req, res) => {
+    //const {description, imagen, title} = req.body;
+    try {
+        //Validación de los campos
+        //if (!description || !imagen || !title){
+        //    return res.status(400).json({error: "Todos los campos son requeridos"})
+        //}
+        const {description, imagen, title} = req.body;
+        const newMeme = await MinionModel.create({ description, imagen, title});
+        res.status(201).json(newMeme); // 201. respuesta que fue creado con éxito.
+
+    } catch (error) {
+        res.status(500)
+        .json({error:"Error creando Memes KO 💀☠️", 
+        detalles:error.message})
+         
+    }
+}
+
 export const getAllMemes = async(req, res) => {
 
     try {
@@ -13,25 +33,7 @@ export const getAllMemes = async(req, res) => {
 }
 
 
-//Crear un nuevo meme
-export const createMeme = async(req, res) => {
-    const {description, imagen, title} = req.body;
-    try {
-        //Validación de los campos
-        if (!description || !imagen || !title){
-            return res.status(400).json({error: "Todos los campos son requeridos"})
-        }
-        
-        const newMeme = await MinionModel.create({ description, imagen, title});
-        res.status(201).json(newMeme); // 201. respuesta que fue creado con éxito.
 
-    } catch (error) {
-        res.status(500)
-        .json({error:"Error creando Memes KO 💀☠️", 
-        detalles:error.message})
-         
-    }
-}
 
 //Obtener un meme por ID
 export const getMemeById = async (req, res) => {
