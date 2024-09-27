@@ -48,6 +48,32 @@ export const getMemeById = async (req, res) => {
     }
 }
 
+//Actualizar un meme
+export const updateMeme = async(req, res) => {
+    try {
+        const {id} = req.params; //ID enviado en la URL
+        const {description, imagen, title} = req.body;
+        const meme = await MinionModel.findByPk(id);
+    
+        if (!meme) {
+           return res.status(404).json({error: "Meme no encontrado"});
+        }
+        meme.description = description;
+        meme.imagen = imagen;
+        meme.title = title;
+        await meme.save();  //guarda los cambios en la BBDD
+
+        res.status(200).json(meme);
+        
+    } catch (error) {
+      res.status(500).json({
+        error: "Error al actualizar el meme😒😒😒💀",
+        detalles: error.message,
+      });  
+        
+    }
+}
+
 
 //Eliminar un meme
 export const deleteMeme = async() => {
