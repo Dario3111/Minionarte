@@ -4,18 +4,19 @@ import express from "express";
 import cors from "cors";
 import router from "./routers/router.js";
 
+//Creo la app de Express
 const app = express();
-app.use(cors())
+//middleware para procesar JSON
 app.use(express.json())
 
-app.get('/', (req,res)=>{
+//configuración de COrs
+app.use(cors())
+
+app.get('/', (req, res)=>{
   res.send('Hola carcola')
-
 })
-
+//rutas definidas en router
 app.use('/', router);
-//const port = 8000;
-
 try {
   await connection_db.authenticate();
   console.log("La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀");
@@ -29,5 +30,4 @@ try {
 }
 app.listen(8000, () =>{
   console.log('server arriba👌👌 http://localhost:8000')
-}
-)
+})
