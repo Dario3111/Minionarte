@@ -32,9 +32,6 @@ export const getAllMemes = async(req, res) => {
     }
 }
 
-
-
-
 //Obtener un meme por ID
 export const getMemeById = async (req, res) => {
     try {
