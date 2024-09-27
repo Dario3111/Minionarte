@@ -3,7 +3,7 @@ import MinionModel from "../models/minionModels.js";
 export const getAllMemes = async(req, res) => {
 
     try {
-        const memes = await MinionModels.findAll()
+        const memes = await MinionModel.findAll()
         res.status(200).json(memes)
     } catch (error) {
         res.status(500)
