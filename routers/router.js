@@ -1,6 +1,6 @@
 import express from "express";
 import { getAllMemes, createMeme, getMemeById, deleteMeme, updateMeme } from "../controllers/minionController.js";
-import { validateCreationMeme, validateUpdateMeme } from '../validators/memeValidator.js'; // Importa las validaciones
+import { validateCreateMeme, validateUpdateMeme } from '../validators/memeValidator.js'; // Importa las validaciones
 import { validationResult } from 'express-validator';
 
 const router = express.Router();
@@ -11,7 +11,7 @@ router.get("/memes", getAllMemes);
 // Crear un meme con validaciones
 router.post(
   "/memes",
-  validateCreationMeme,  // Aplicar validaciones para crear un meme
+  validateCreateMeme,  // Aplicar validaciones para crear un meme
   (req, res, next) => {
     // Manejo de los errores de validación
     const errors = validationResult(req);
