@@ -1,10 +1,10 @@
-import minionModels from '../models/minionModels.js';
+import MinionModel from '../models/minionModels.js';
 
 // CREATE 
 export const createMeme = async (req, res) => {
     try {
         const { description, imagen, title } = req.body; // Datos enviados desde el cliente
-        const newMeme = await minionModels.create({ description, imagen, title });
+        const newMeme = await MinionModel.create({ description, imagen, title });
         res.status(201).json(newMeme); // Respuesta con el meme creado
     } catch (error) {
         res
@@ -16,7 +16,7 @@ export const createMeme = async (req, res) => {
 // READ 
 export const getAllMemes = async (req, res) => {
     try {
-        const memes = await minionModels.findAll(); // Obtiene todos los registros de la tabla 'memes'
+        const memes = await MinionModel.findAll(); // Obtiene todos los registros de la tabla 'memes'
         res.status(200).json(memes); // Respuesta con todos los memes
     } catch (error) {
         res
@@ -29,7 +29,7 @@ export const getAllMemes = async (req, res) => {
 export const getMemeById = async (req, res) => {
     try {
         const { id } = req.params; // ID enviado en la URL
-        const meme = await minionModels.findByPk(id); // Busca el meme por su clave primaria (ID)
+        const meme = await MinionModel.findByPk(id); // Busca el meme por su clave primaria (ID)
         if (!meme) {
         return res.status(404).json({ error: "Meme no encontrado" });
         }
@@ -46,7 +46,7 @@ export const updateMeme = async (req, res) => {
     try {
         const { id } = req.params; // ID enviado en la URL
         const { description, imagen, title } = req.body; // Nuevos datos enviados desde el cliente
-        const meme = await minionModels.findByPk(id);
+        const meme = await MinionModel.findByPk(id);
 
         if (!meme) {
         return res.status(404).json({ error: "Meme no encontrado 👻" });
@@ -69,7 +69,7 @@ export const updateMeme = async (req, res) => {
 export const deleteMeme = async (req, res) => {
     try {
         const { id } = req.params; // ID enviado en la URL
-        const meme = await minionModels.findByPk(id);
+        const meme = await MinionModel.findByPk(id);
 
         if (!meme) {
         return res.status(404).json({ error: "Meme no encontrado 👹💩" });
