@@ -8,8 +8,8 @@ export const createMeme = async(req, res) => {
         //if (!description || !imagen || !title){
         //    return res.status(400).json({error: "Todos los campos son requeridos"})
         //}
-        const {description, imagen, title} = req.body;
-        const newMeme = await MinionModel.create({ description, imagen, title});
+        const {title, description, imagen} = req.body;
+        const newMeme = await MinionModel.create({ title, description, imagen});
         res.status(201).json(newMeme); // 201. respuesta que fue creado con éxito.
 
     } catch (error) {
@@ -75,7 +75,7 @@ export const updateMeme = async(req, res) => {
 
 
 //Eliminar un meme
-export const deleteMeme = async() => {
+export const deleteMeme = async(req, res) => {
     try {
         const {id} = req.params; // 
         const meme = await MinionModel.findByPk(id);
