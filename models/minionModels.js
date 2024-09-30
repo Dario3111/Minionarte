@@ -31,7 +31,7 @@ const MinionModel = connection_db.define(
         },
       },
     },
-    imagen: {
+    imageUrl: {
       type: DataTypes.STRING(2083), // Tamaño máximo de URL para imagen
       allowNull: false,
       validate: {

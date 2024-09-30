@@ -3,8 +3,8 @@ import MinionModel from '../models/minionModels.js';
 // CREATE 
 export const createMeme = async (req, res) => {
     try {
-        const { description, imagen, title } = req.body; // Datos enviados desde el cliente
-        const newMeme = await MinionModel.create({ description, imagen, title });
+        const { description, imageUrl, title } = req.body; // Datos enviados desde el cliente
+        const newMeme = await MinionModel.create({ description, imageUrl, title });
         res.status(201).json(newMeme); // Respuesta con el meme creado
     } catch (error) {
         res
@@ -45,7 +45,7 @@ export const getMemeById = async (req, res) => {
 export const updateMeme = async (req, res) => {
     try {
         const { id } = req.params; // ID enviado en la URL
-        const { description, imagen, title } = req.body; // Nuevos datos enviados desde el cliente
+        const { description, imageUrl, title } = req.body; // Nuevos datos enviados desde el cliente
         const meme = await MinionModel.findByPk(id);
 
         if (!meme) {
@@ -53,7 +53,7 @@ export const updateMeme = async (req, res) => {
         }
 
         meme.description = description;
-        meme.imagen = imagen;
+        meme.imageUrl = imageUrl;
         meme.title = title;
         await meme.save(); // Guarda los cambios en la base de datos
 
