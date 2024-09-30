@@ -25,7 +25,7 @@ const MinionModel = connection_db.define(
         len: { args: [1, 200], msg: 'La descripción debe tener entre 1 y 200 caracteres' },
       },
     },
-    imagen: {
+    imageUrl: {
       type: DataTypes.STRING(2083),  // Tamaño máximo de URL para imagen
       allowNull: false, 
       validate: {

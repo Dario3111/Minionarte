@@ -4,7 +4,10 @@ import MinionModel from '../models/minionModels.js';
 export const getAllMemes = async (req, res) => {
   try {
     const memes = await MinionModel.findAll(); // Obtiene todos los registros de la tabla 'memes'
-    res.status(200).json(memes); // Respuesta con todos los memes
+    if (!Array.isArray(memes)) {
+      throw new Error("Los datos devueltos desde la base de datos no son un array");
+    }
+    res.status(200).json(memes.data); // Respuesta con todos los memes
   } catch (error) {
     res
       .status(500)
@@ -15,8 +18,8 @@ export const getAllMemes = async (req, res) => {
 // Crear un nuevo meme
 export const createMeme = async (req, res) => {
   try {
-    const { description, imagen, title } = req.body; // Datos enviados desde el cliente
-    const newMeme = await MinionModel.create({ description, imagen, title });
+    const { description, imageUrl, title } = req.body; // Datos enviados desde el cliente
+    const newMeme = await MinionModel.create({ description, imageUrl, title });
     res.status(201).json(newMeme); // Respuesta con el meme creado
   } catch (error) {
     res.status(500).json({ error: "Error al crear el meme ☠️☠️☠️", detalles: error.message });
@@ -41,7 +44,7 @@ export const getMemeById = async (req, res) => {
 export const updateMeme = async (req, res) => {
   try {
     const { id } = req.params; // ID enviado en la URL
-    const { description, imagen, title } = req.body; // Nuevos datos enviados desde el cliente
+    const { description, imageUrl, title } = req.body; // Nuevos datos enviados desde el cliente
     const meme = await MinionModel.findByPk(id);
 
     if (!meme) {
@@ -49,7 +52,7 @@ export const updateMeme = async (req, res) => {
     }
 
     meme.description = description;
-    meme.imagen = imagen;
+    meme.imageUrl = imageUrl;
     meme.title = title;
     await meme.save(); // Guarda los cambios en la base de datos
 
