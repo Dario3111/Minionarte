@@ -14,11 +14,11 @@ const MinionModel = connection_db.define(
       allowNull: false,
     },
     description: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(2083),
       allowNull: false, 
     },
-    imagen: {
-      type: DataTypes.STRING(2083),  // Tamaño máximo de URL para imagen
+    imageUrl: {
+      type: DataTypes.STRING(2083),  // Tamaño máximo de URL para imageUrl
       allowNull: false, 
     },
   },
