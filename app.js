@@ -22,7 +22,7 @@ try {
   console.log("La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀");
 
   //sincroniza el modelo con la base de datos sin recrear la tabla
-  await MinionModel.sync({ alter: false });  // O usa sync({ alter: true }) si esperas cambios en el modelo
+  await MinionModel.sync();  // { alter: false } O usa sync({ alter: true }) si esperas cambios en el modelo
   console.log("La tabla está sincronizada con el modelo existente.(❁´◡`❁)");
   
 } catch (error) {

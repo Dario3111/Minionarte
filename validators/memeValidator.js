@@ -9,7 +9,7 @@ export const validateCreateMeme = [
     .notEmpty().withMessage('La descripción es obligatoria')
     .isLength({ min: 1, max: 200 }).withMessage('La descripción debe tener entre 1 y 200 caracteres'),
 
-  body('imageUrl')
+  body('url')
     .notEmpty().withMessage('La URL de la imagen es obligatoria')
     .isURL().withMessage('Debe ser una URL válida')
     .isLength({ max: 2083 }).withMessage('La URL de la imageUrl debe un máximo de 2083 caracteres'),
@@ -24,7 +24,7 @@ export const validateUpdateMeme = [
     .optional()
     .isLength({ min: 1, max: 200 }).withMessage('La descripción debe tener entre 1 y 200 caracteres'),
 
-  body('imageUrl')
+  body('url')
     .optional()
     .isURL().withMessage('Debe ser una URL válida')
     .isLength({ max: 2083 }).withMessage('La URL de la imageUrl debe un máximo de 2083 caracteres'),

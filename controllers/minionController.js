@@ -8,8 +8,8 @@ export const createMeme = async(req, res) => {
         //if (!description || !imageUrl || !title){
         //    return res.status(400).json({error: "Todos los campos son requeridos"})
         //}
-        const {title, description, imageUrl} = req.body;
-        const newMeme = await MinionModel.create({ title, description, imageUrl});
+        const {title, description, url} = req.body;
+        const newMeme = await MinionModel.create({ title, description, url});
         res.status(201).json(newMeme); // 201. respuesta que fue creado con éxito.
 
     } catch (error) {
@@ -51,7 +51,7 @@ export const getMemeById = async (req, res) => {
 export const updateMeme = async(req, res) => {
     try {
         const {id} = req.params; //ID enviado en la URL
-        const {title, description, imageUrl} = req.body;
+        const {title, description, url} = req.body;
         const meme = await MinionModel.findByPk(id);
     
         if (!meme) {
@@ -59,7 +59,7 @@ export const updateMeme = async(req, res) => {
         }
         meme.title = title;
         meme.description = description;
-        meme.imageUrl = imageUrl;
+        meme.url = url;
         await meme.save();  //guarda los cambios en la BBDD
 
         res.status(200).json(meme);
