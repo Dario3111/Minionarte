@@ -1,42 +1,42 @@
-import { body } from "express-validator";
+import { body } from 'express-validator';
 
 export const validateCreateMeme = [
-  body("title")
+  body('title')
     .notEmpty()
-    .withMessage("El título es obligatorio")
+    .withMessage('El título es obligatorio')
     .isLength({ min: 1, max: 50 })
-    .withMessage("El título debe tener entre 1 y 50 caracteres"),
+    .withMessage('El título debe tener entre 1 y 50 caracteres'),
 
-  body("description")
+  body('description')
     .notEmpty()
-    .withMessage("La descripción es obligatoria")
+    .withMessage('La descripción es obligatoria')
     .isLength({ min: 1, max: 200 })
-    .withMessage("La descripción debe tener entre 1 y 200 caracteres"),
+    .withMessage('La descripción debe tener entre 1 y 200 caracteres'),
 
-  body("imagen")
+  body('url')
     .notEmpty()
-    .withMessage("La URL de la imagen es obligatoria")
+    .withMessage('La URL de la imagen es obligatoria')
     .isURL()
-    .withMessage("Debe ser una URL válida")
+    .withMessage('Debe ser una URL válida')
     .isLength({ max: 2083 })
-    .withMessage("La URL de la imagen debe tener un máximo de 2083 caracteres"),
+    .withMessage('La URL de la imagen debe tener un máximo de 2083 caracteres'),
 ];
 
 export const validateUpdateMeme = [
-  body("title")
+  body('title')
     .optional() // El campo es opcional para la actualización
     .isLength({ min: 1, max: 50 })
-    .withMessage("El título debe tener entre 1 y 50 caracteres"),
+    .withMessage('El título debe tener entre 1 y 50 caracteres'),
 
-  body("description")
+  body('description')
     .optional()
     .isLength({ min: 1, max: 200 })
-    .withMessage("La descripción debe tener entre 1 y 200 caracteres"),
+    .withMessage('La descripción debe tener entre 1 y 200 caracteres'),
 
-  body("imagen")
+  body('url')
     .optional()
     .isURL()
-    .withMessage("Debe ser una URL válida")
+    .withMessage('Debe ser una URL válida')
     .isLength({ max: 2083 })
-    .withMessage("La URL de la imagen debe tener un máximo de 2083 caracteres"),
+    .withMessage('La URL de la imagen debe tener un máximo de 2083 caracteres'),
 ];
