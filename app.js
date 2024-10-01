@@ -3,13 +3,18 @@ import MinionModel from './models/minionModels.js'; // Asegúrate de usar el nom
 import express from 'express';
 import cors from 'cors';
 import router from './routers/router.js';
+
 const app = express();
+
 app.use(cors());
 app.use(express.json());
+
 app.get('/', (req, res) => {
   res.send('Hola Caracola');
 });
+
 app.use('/', router);
+
 try {
   await connection_db.authenticate();
   console.log('La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀');
