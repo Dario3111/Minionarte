@@ -62,7 +62,7 @@ export const updateMeme = async (req, res) => {
     if (!meme) {
       return res.status(404).json({ error: 'Meme no encontrado' });
     }
-
+    //actualiza el mme
     meme.descripcion = descripcion;
     meme.url = url;
     meme.nombre = nombre;

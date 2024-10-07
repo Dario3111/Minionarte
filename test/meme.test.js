@@ -37,15 +37,17 @@ describe("crud memes", () =>{
     // Test para actualizar un meme
     test("should update an existing meme", async() => {
         const updatedMeme = {
-            nombre: "name of the Updated meme",
+            
             descripcion: "Updated description",
+            url: "https://res.cloudinary.com/yederpt/image/upload/v1728308746/prdmj8ytvyic0ugi1vce.png",
+            nombre: "name of the Updated meme"
         };
         const response = await request(app)
         .put(`/memes/${createdMemeId}`)
         .send(updatedMeme);
 
         expect(response.statusCode).toBe(200);
-        expect(response.body.nombre).toBe("Updated meme nombre")
+        expect(response.body.nombre).toBe("name of the Updated meme");
     })
 
     // Test para eliminar un meme
