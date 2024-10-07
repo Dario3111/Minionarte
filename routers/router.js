@@ -1,11 +1,5 @@
 import express from "express";
-import {
-    getAllMemes,
-    getMemeById,
-    createMeme,
-    updateMeme,
-    deleteMeme,
-} from "../controllers/minionController.js";
+import {getAllMemes, getMemeById, createMeme, updateMeme, deleteMeme,} from "../controllers/minionController.js";
 import { validateCreateMeme, validateUpdateMeme } from '../validators/memeValidator.js'; // Importa las validaciones
 import { validationResult } from 'express-validator';
 

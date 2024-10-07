@@ -20,8 +20,8 @@ export const getAllMemes = async (req, res) => {
 // Crear un nuevo meme
 export const createMeme = async (req, res) => {
   try {
-    const { description, url, title } = req.body; // Datos enviados desde el cliente
-    const newMeme = await MinionModel.create({ description, url, title });
+    const { descripcion, url, nombre } = req.body; // Datos enviados desde el cliente
+    const newMeme = await MinionModel.create({ descripcion, url, nombre });
     res.status(201).json(newMeme); // Respuesta con el meme creado
   } catch (error) {
     res
@@ -56,16 +56,16 @@ export const getMemeById = async (req, res) => {
 export const updateMeme = async (req, res) => {
   try {
     const { id } = req.params; // ID enviado en la URL
-    const { description, url, title } = req.body; // Nuevos datos enviados desde el cliente
+    const { descripcion, url, nombre } = req.body; // Nuevos datos enviados desde el cliente
     const meme = await MinionModel.findByPk(id);
 
     if (!meme) {
       return res.status(404).json({ error: 'Meme no encontrado' });
     }
 
-    meme.description = description;
+    meme.descripcion = descripcion;
     meme.url = url;
-    meme.title = title;
+    meme.nombre = nombre;
     await meme.save(); // Guarda los cambios en la base de datos
 
     res.status(200).json(meme); // Respuesta con el meme actualizado
