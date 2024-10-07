@@ -9,7 +9,7 @@ const MinionModel = connection_db.define(
       autoIncrement: true,
       primaryKey: true,
     },
-    title: {
+    nombre: {
       type: DataTypes.STRING (50),
       allowNull: false,
       validate: {
@@ -17,7 +17,7 @@ const MinionModel = connection_db.define(
         len: { args: [1, 50], msg: 'El título debe tener entre 1 y 50 caracteres' },
     },
   },
-    description: {
+    descripcion: {
       type: DataTypes.STRING(200),
       allowNull: false, 
       validate: {
