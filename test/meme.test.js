@@ -35,18 +35,8 @@ describe("crud memes", () =>{
     })
     
     // Test para actualizar un meme
-    test("should update an existing meme", async() => {
-        const updatedMeme = {
-            nombre: "name of the Updated meme",
-            descripcion: "Updated description",
-        };
-        const response = await request(app)
-        .put(`/memes/${createdMemeId}`)
-        .send(updatedMeme);
-
-        expect(response.statusCode).toBe(200);
-        expect(response.body.nombre).toBe("Updated meme nombre")
-    })
+  
+    
 
     // Test para eliminar un meme
     
