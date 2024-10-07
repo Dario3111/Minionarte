@@ -7,7 +7,7 @@ describe("crud memes", () =>{
     let createdMemeId;
     
     // Test para obtener memes
-    test("should return a response with 200 and type json", async () => {
+    test("should return a response with 200 and type json", async () => { //verificar si la respuesta de una petición GET
         const response = await request(app).get("/memes");
         expect(response.statusCode).toBe(200);
         expect(response.headers["content-type"]).toContain("application/json");
