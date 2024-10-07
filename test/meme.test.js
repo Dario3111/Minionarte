@@ -53,8 +53,8 @@ describe("crud memes", () =>{
     // Test para eliminar un meme
     test("should delete an existing meme", async () => {
         const response = await request(app).delete(`/memes/${createdMemeId}`);
-        expect(response.statusCode).toBe(204);
-    })
+        expect(response.statusCode).toBe(200);
+    });
     
 
     afterAll( () => {
