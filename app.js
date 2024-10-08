@@ -29,24 +29,3 @@ export async function initializeDatabase() {
 }
 
 export default app;
-
-/*  En lugar de ejecutar await en el nivel superior, envolvemos la lógica de conexión a la base de datos en una función asíncrona y luego exportamos el servidor Express. Esto evita el problema de top-level await que tenemos con los tests.
-async function startServer() {
-  try {
-    await connection_db.authenticate();
-    console.log('La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀');
-
-    //sincronizamos el modelo con la base de datos sin recrear la tabla
-    await MinionModel.sync(); // O usamos sync({ alter: true }) si esperamos cambios en el modelo.
-    console.log('La tabla está sincronizada con el modelo existente.(❁´◡`❁)');
-  } catch (error) {
-    console.error('No se pudo conectar a la base de datosㄟ(≧◇≦)ㄏ:', error);
-  }
-  app.listen(8000, () => {
-    console.log('Servidor trabajando en http://localhost:8000 (❁´◡`❁)');
-  });
-}
-startServer();
-
-export default app;
- */
