@@ -1,10 +1,11 @@
 import request from "supertest";
 import {app, server} from "../app.js";
 import connection_db from "../database/connection_db.js";
+import MinionModel from "../models/minionModels.js";
 
 describe("crud memes", () =>{
   
-    let createdMemeId;
+    //let createdMemeId;
     
     // Test para obtener memes
     test("should return a response with 200 and type json", async () => { //verificar si la respuesta de una petición GET
@@ -30,12 +31,16 @@ describe("crud memes", () =>{
 
         expect(response.statusCode).toBe(201);
         expect(response.body).toHaveProperty("id");
-        createdMemeId = response.body.id;
+        //createdMemeId = response.body.id;
         
     })
     
     // Test para actualizar un meme
     test("should update an existing meme", async() => {
+        //
+        const getMemeResponse = await request(app).get("/memes");
+        const memeToUpdate = getMemeResponse.body[0];
+        
         const updatedMeme = {
             
             descripcion: "Updated description",
@@ -43,7 +48,7 @@ describe("crud memes", () =>{
             nombre: "name of the Updated meme"
         };
         const response = await request(app)
-        .put(`/memes/${createdMemeId}`)
+        .put(`/memes/${memeToUpdate.id}`)
         .send(updatedMeme);
 
         expect(response.statusCode).toBe(200);
@@ -52,7 +57,15 @@ describe("crud memes", () =>{
 
     // Test para eliminar un meme
     test("should delete an existing meme", async () => {
-        const response = await request(app).delete(`/memes/${createdMemeId}`);
+
+        const getMemesResponse = await request(app).get("/memes");
+        const memeToDelete = await MinionModel.create( {
+            nombre: "deletememe",
+            url: "https://res.cloudinary.com/yederpt/image/upload/v1728308746/prdmj8ytvyic0ugi1vce.png",
+            descripcion: "meme to be deleted"
+          });
+        // Eliminar el meme recién creado
+        const response = await request(app).delete(`/memes/${memeToDelete.id}`);
         expect(response.statusCode).toBe(200);
     });
     
@@ -61,7 +74,5 @@ describe("crud memes", () =>{
     
         server.close();
         connection_db.close();
-    }
-
-    )
+    })
 })
