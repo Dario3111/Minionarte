@@ -35,36 +35,39 @@ describe("crud memes", () =>{
         
     })
     
-    // Test para actualizar un meme
+    // Test para actualizar PUT un meme
     test("should update an existing meme", async() => {
-        //
-        const getMemeResponse = await request(app).get("/memes");
-        const memeToUpdate = getMemeResponse.body[0];
-        
+        //Creamos un meme después de actualizarlo
+        const memeToUpdate = await request(app).post("/memes").send({
+            descripcion: 'test Meme for PUT',
+            url: 'https://res.cloudinary.com/yederpt/image/upload/v1728308746/prdmj8ytvyic0ugi1vce.png',
+            nombre: ' test meme for PUT'
+        })
+       
         const updatedMeme = {
             
             descripcion: "Updated description",
             url: "https://res.cloudinary.com/yederpt/image/upload/v1728308746/prdmj8ytvyic0ugi1vce.png",
-            nombre: "name of the Updated meme"
+            nombre: "Updated Meme"
         };
-        const response = await request(app)
-        .put(`/memes/${memeToUpdate.id}`)
-        .send(updatedMeme);
 
+        //Actualizamos el meme
+        const response = await request(app).put(`/memes/${memeToUpdate.body.id}`).send(updatedMeme);
         expect(response.statusCode).toBe(200);
-        expect(response.body.nombre).toBe("name of the Updated meme");
+        expect(response.body.nombre).toBe(updatedMeme.nombre);
+        expect(response.body.url).toBe(updatedMeme.url);
+        expect(response.body.descripcion).toBe(updatedMeme.descripcion);
     })
 
     // Test para eliminar un meme
     test("should delete an existing meme", async () => {
-
-        const getMemesResponse = await request(app).get("/memes");
+        // Creamos el meme usando el modelo
         const memeToDelete = await MinionModel.create( {
             nombre: "deletememe",
             url: "https://res.cloudinary.com/yederpt/image/upload/v1728308746/prdmj8ytvyic0ugi1vce.png",
             descripcion: "meme to be deleted"
           });
-        // Eliminar el meme recién creado
+        // Eliminar el meme creado recientemente
         const response = await request(app).delete(`/memes/${memeToDelete.id}`);
         expect(response.statusCode).toBe(200);
     });
