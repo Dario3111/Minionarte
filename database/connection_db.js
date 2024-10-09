@@ -1,15 +1,17 @@
 import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+//import dotenv from 'dotenv';
+import {DB_DEV_NAME, DB_USER, DB_PASSWORD, DB_HOST, DB_TEST_NAME, NODE_ENV} from "../config.js";
 
-// Cargar variables de entorno desde el archivo .env
-dotenv.config();
+const DB_NAME = NODE_ENV === "test" ? DB_TEST_NAME:DB_DEV_NAME 
 
+//Para conectarme a mysql
 const connection_db = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+
+    DB_NAME,
+    DB_USER,
+    DB_PASSWORD,
   {
-    host: process.env.DB_HOST,
+    host: DB_HOST,
     dialect: 'mysql',
     define: {
       timestamps: false,
