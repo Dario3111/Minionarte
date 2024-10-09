@@ -1,17 +1,26 @@
 import express from "express";
-import { getAllMemes, createMeme, getMemeById, deleteMeme, updateMeme } from "../controllers/minionController.js";
-import { validateCreateMeme, validateUpdateMeme } from '../validators/memeValidator.js'; // Importa las validaciones
-import { validationResult } from 'express-validator';
+import {
+  getAllMemes,
+  createMeme,
+  getMemeById,
+  deleteMeme,
+  updateMeme,
+} from "../controllers/minionController.js";
+import {
+  validateCreateMeme,
+  validateUpdateMeme,
+} from "../validators/memeValidator.js"; // Importa las validaciones
+import { validationResult } from "express-validator";
 
 const router = express.Router();
 
 // Obtener todos los memes
-router.get("/memes", getAllMemes);
+router.get("/", getAllMemes); // Cambiado de "/memes" a "/"
 
 // Crear un meme con validaciones
 router.post(
-  "/memes",
-  validateCreateMeme,  // Aplicar validaciones para crear un meme
+  "/",
+  validateCreateMeme, // Aplicar validaciones para crear un meme
   (req, res, next) => {
     // Manejo de los errores de validación
     const errors = validationResult(req);
@@ -24,12 +33,12 @@ router.post(
 );
 
 // Obtener un meme por ID
-router.get("/memes/:id", getMemeById);
+router.get("/:id", getMemeById);
 
 // Actualizar un meme con validaciones
 router.put(
-  "/memes/:id",
-  validateUpdateMeme,  // Aplicar validaciones para actualizar un meme
+  "/:id",
+  validateUpdateMeme, // Aplicar validaciones para actualizar un meme
   (req, res, next) => {
     // Manejo de los errores de validación
     const errors = validationResult(req);
@@ -42,6 +51,6 @@ router.put(
 );
 
 // Eliminar un meme
-router.delete("/memes/:id", deleteMeme);
+router.delete("/:id", deleteMeme);
 
 export default router;

@@ -1,20 +1,24 @@
-
-import { Sequelize } from 'sequelize';
-import dotenv from 'dotenv';
+import mongoose from "mongoose";
+import dotenv from "dotenv";
 
 dotenv.config();
 
-const isTestEnv = process.env.NODE_ENV === 'test';
+const dbURI =
+  process.env.NODE_ENV === "test"
+    ? process.env.TEST_DB_URI
+    : process.env.DB_URI;
 
-const connection_db = new Sequelize(
-  isTestEnv ? process.env.TEST_DB_NAME : process.env.DB_NAME,
-  isTestEnv ? process.env.TEST_DB_USER : process.env.DB_USER,
-  isTestEnv ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD,
-  {
-    host: isTestEnv ? process.env.TEST_DB_HOST : process.env.DB_HOST,
-    dialect: 'mysql',  // O el motor de base de datos que estés utilizando
-    logging: isTestEnv ? false : console.log,  // Desactiva el logging en pruebas
+const connectDB = async () => {
+  try {
+    await mongoose.connect(dbURI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("Conexión a MongoDB exitosa");
+  } catch (error) {
+    console.error("Error al conectar a MongoDB:", error);
+    process.exit(1); // Cierra el proceso si no puede conectarse
   }
-);
+};
 
-export default connection_db;
+export default connectDB;
