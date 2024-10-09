@@ -1,11 +1,12 @@
 import request from 'supertest';
 import app from '../app.js';
 import connection_db from '../database/connection_db.js';
+import MinionModel from '../models/minionModels.js';  // Importamos el modelo para crear los memes directamente
 
 describe('CRUD /memes', () => {
 
   // Test para la petición GET (listado de todos los memes)
-    test('should return a response with status 200 and type JSON', async () => {
+  test('should return a response with status 200 and type JSON', async () => {
     const response = await request(app).get('/memes');
     expect(response.statusCode).toBe(200);
     expect(response.headers['content-type']).toContain('application/json');
@@ -28,20 +29,17 @@ describe('CRUD /memes', () => {
 
   // Test para la petición GET con un ID
   test('should return a response with status 200 and type JSON for a specific meme', async () => {
-    // Crear un meme para despues poder obtenerlo
-    const memeById = {
+    // Crear un meme usando el modelo directamente
+    const createdMeme = await MinionModel.create({
       nombre: 'Test Meme for GET by ID',
       descripcion: 'Test description',
       url: 'http://example.com/meme.png',
-    };
-
-    // Crear el meme
-    const createdMeme = await request(app).post('/memes').send(memeById);
+    });
 
     // Ahora hacer GET por ID
-    const response = await request(app).get(`/memes/${createdMeme.body.id}`);
+    const response = await request(app).get(`/memes/${createdMeme.id}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body.id).toBe(createdMeme.body.id);
+    expect(response.body.id).toBe(createdMeme.id);
     expect(response.headers['content-type']).toContain('application/json');
   });
 
@@ -53,15 +51,15 @@ describe('CRUD /memes', () => {
 
   // Test para la petición DELETE
   test('should delete a meme and return it with status 200', async () => {
-    // Crear un meme para despues poder eliminarlo
-    const memeToDelete = await request(app).post('/memes').send({
+    // Crear un meme usando el modelo directamente
+    const memeToDelete = await MinionModel.create({
       nombre: 'Test Meme for DELETE',
       descripcion: 'Test description',
       url: 'http://example.com/meme.png',
     });
 
     // Ahora eliminamos el meme
-    const response = await request(app).delete(`/memes/${memeToDelete.body.id}`);
+    const response = await request(app).delete(`/memes/${memeToDelete.id}`);
     expect(response.statusCode).toBe(200);
     expect(response.body.mensaje).toBe('Meme eliminado correctamente🚽');
   });
@@ -74,8 +72,8 @@ describe('CRUD /memes', () => {
 
   // Test para la petición PUT (actualización)
   test('should update a meme and return it with status 200', async () => {
-    // Crear un meme para después poder actualizarlo
-    const memeToUpdate = await request(app).post('/memes').send({
+    // Crear un meme usando el modelo directamente
+    const memeToUpdate = await MinionModel.create({
       nombre: 'Test Meme for PUT',
       descripcion: 'Test description',
       url: 'http://example.com/meme.png',
@@ -89,7 +87,7 @@ describe('CRUD /memes', () => {
     };
 
     // Actualizamos el meme
-    const response = await request(app).put(`/memes/${memeToUpdate.body.id}`).send(updatedMeme);
+    const response = await request(app).put(`/memes/${memeToUpdate.id}`).send(updatedMeme);
     expect(response.statusCode).toBe(200);
     expect(response.body.nombre).toBe(updatedMeme.nombre);
     expect(response.body.descripcion).toBe(updatedMeme.descripcion);
