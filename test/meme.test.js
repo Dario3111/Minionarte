@@ -70,6 +70,7 @@ describe("crud memes", () =>{
         // Eliminar el meme creado recientemente
         const response = await request(app).delete(`/memes/${memeToDelete.id}`);
         expect(response.statusCode).toBe(200);
+        expect(response.body.mensaje).toBe('Meme eliminado correctamente🚽');
     });
     
 
