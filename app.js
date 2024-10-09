@@ -28,3 +28,5 @@ try {
 export const server = app.listen (8000, () => {
   console.log('Servidor trabajando en http://localhost:8000 (❁´◡`❁)');
 });
+
+export default app;
