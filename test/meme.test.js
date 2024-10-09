@@ -29,8 +29,6 @@ describe("crud memes", () =>{
         const response = await request(app).post("/memes").send(newMeme);
 
         expect(response.statusCode).toBe(201);
-        //expect(response.body).toHaveProperty("id");
-        //createdMemeId = response.body.id;
         expect(response.body.nombre).toBe(newMeme.nombre);
         expect(response.body.url).toBe(newMeme.url);
         expect(response.body.descripcion).toBe(newMeme.descripcion);
