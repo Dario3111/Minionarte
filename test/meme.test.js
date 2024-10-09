@@ -74,8 +74,7 @@ describe("crud memes", () =>{
     
 
     afterAll( () => {
-    
-        server.close();
+         server.close();
         connection_db.close();
     })
 })

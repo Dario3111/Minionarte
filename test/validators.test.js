@@ -1,5 +1,5 @@
 import request from 'supertest';
-import app from '../app'; 
+import {app, server} from "../app.js";
 import connection_db from '../database/connection_db.js';
 
 describe('Validaciones en la creación de memes (POST /memes)', () => {
@@ -64,7 +64,9 @@ describe('Validaciones en la creación de memes (POST /memes)', () => {
     expect(response.status).toBe(201); // Código 201 creado exitosamente
     expect(response.body.nombre).toBe('Meme correcto');
   });
-});
-afterAll(async () => {
-  await connection_db.close(); // Cierra la conexión a la base de datos después de todos los tests
-});
+
+    afterAll( () => {
+    server.close();
+    connection_db.close();
+  })
+})
