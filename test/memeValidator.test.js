@@ -1,42 +1,38 @@
 import request from "supertest";
 import app from "../app";
+import mongoose from "mongoose";
 import connectToMongoDB from "../database/connection_db.js";
-import MinionModel from "../models/minionModels.js"; // Tu modelo de Mongoose
+import MinionModel from "../models/minionModels.js";
 
 let server;
 
 beforeAll(async () => {
-  // Conectar a la base de datos de MongoDB
   await connectToMongoDB();
-  // Inicializa el servidor antes de las pruebas
   server = app.listen(6000);
 });
 
 afterEach(async () => {
-  // Limpiamos la colección de api/api/memes después de cada prueba
   await MinionModel.deleteMany({});
 });
 
 afterAll(async () => {
-  // Cerramos la conexión a la base de datos después de las pruebas
   await mongoose.connection.close();
-  // Cerramos el servidor después de las pruebas
-  server.close();
+  await server.close();
 });
 
 describe("Validaciones en la creación de api/memes (POST /api/memes)", () => {
   it("Debe fallar si el título (nombre) está vacío", async () => {
     const response = await request(app).post("/api/memes").send({
-      nombre: "", // Error: Título vacío
+      nombre: "",
       descripcion: "Un meme gracioso",
       url: "http://example.com/meme.png",
     });
 
-    expect(response.status).toBe(400); // Código de error por validación fallida
+    expect(response.status).toBe(400);
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          msg: "El título es obligatorio", // Mensaje que debe mostrar
+          msg: "El título es obligatorio",
         }),
       ])
     );
@@ -45,15 +41,15 @@ describe("Validaciones en la creación de api/memes (POST /api/memes)", () => {
   it("Debe fallar si la descripción tiene menos de 1 o más de 200 caracteres", async () => {
     const response = await request(app).post("/api/memes").send({
       nombre: "Meme divertido",
-      descripcion: "", // Error: Descripción vacía
+      descripcion: "",
       url: "http://example.com/meme.png",
     });
 
-    expect(response.status).toBe(400); // Código de error por validación fallida
+    expect(response.status).toBe(400);
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          msg: "La descripción es obligatoria", // Mensaje esperado
+          msg: "La descripción es obligatoria",
         }),
       ])
     );
@@ -63,14 +59,14 @@ describe("Validaciones en la creación de api/memes (POST /api/memes)", () => {
     const response = await request(app).post("/api/memes").send({
       nombre: "Meme con URL inválida",
       descripcion: "Descripción válida",
-      url: "meme-invalido", // Error: URL no válida
+      url: "meme-invalido",
     });
 
     expect(response.status).toBe(400);
     expect(response.body.errors).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          msg: "Debe ser una URL válida", // Mensaje esperado
+          msg: "Debe ser una URL válida",
         }),
       ])
     );
@@ -83,7 +79,7 @@ describe("Validaciones en la creación de api/memes (POST /api/memes)", () => {
       url: "http://example.com/meme-correcto.png",
     });
 
-    expect(response.status).toBe(201); // Código 201 creado exitosamente
+    expect(response.status).toBe(201);
     expect(response.body.nombre).toBe("Meme correcto");
   });
 });

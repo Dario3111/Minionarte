@@ -1,37 +1,26 @@
 import request from "supertest";
-import app from "../app.js"; // Asegúrate de que la ruta sea correcta
-import mongoose from "mongoose"; // Asegúrate de importar mongoose para cerrar la conexión
-import MinionModel from "../models/minionModels.js"; // Tu modelo de Mongoose
+import app from "../app.js";
+import mongoose from "mongoose";
+import MinionModel from "../models/minionModels.js";
 import connectToMongoDB from "../database/connection_db.js";
 
 let server;
 
 beforeAll(async () => {
-  // Conectar a la base de datos de MongoDB
   await connectToMongoDB();
+  server = app.listen(3000);
 });
 
 afterEach(async () => {
-  // Limpiamos la colección de api/memes después de cada prueba
   await MinionModel.deleteMany({});
 });
 
 afterAll(async () => {
-  // Cerramos la conexión a la base de datos después de las pruebas
   await mongoose.connection.close();
-  // Cerramos el servidor después de las pruebas
   server.close();
 });
 
 describe("CRUD /api/memes", () => {
-  // Test para la petición GET (listado de todos los api/memes)
-  test("should return a response with status 200 and type JSON", async () => {
-    const response = await request(app).get("/api/memes");
-    expect(response.statusCode).toBe(200);
-    expect(response.headers["content-type"]).toContain("application/json");
-  });
-
-  // Test para la petición GET (listado de todos los api/memes)
   test("should return a response with status 200 and type JSON", async () => {
     const response = await request(app).get("/api/memes");
     expect(response.statusCode).toBe(200);
@@ -61,14 +50,16 @@ describe("CRUD /api/memes", () => {
       url: "http://example.com/meme.png",
     });
 
-    const response = await request(app).get(`/api/memes/${createdMeme_id}`);
+    const response = await request(app).get(`/api/memes/${createdMeme._id}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body._id).toBe(createdMeme_id); // Asegúrate de comparar el ID como string
+    expect(response.body._id).toBe(createdMeme._id.toString()); // Convertimos el ObjectId a string
     expect(response.headers["content-type"]).toContain("application/json");
   });
 
   test("should return 404 if meme is not found", async () => {
-    const response = await request(app).get("/api/memes/999"); // ID que no existe
+    const response = await request(app).get(
+      `/api/memes/${new mongoose.Types.ObjectId()}`
+    );
     expect(response.statusCode).toBe(404);
     expect(response.body.error).toBe("Meme no encontrado");
   });
@@ -81,15 +72,19 @@ describe("CRUD /api/memes", () => {
       url: "http://example.com/meme.png",
     });
 
-    const response = await request(app).delete(`/api/memes/${memeToDelete.id}`);
+    const response = await request(app).delete(
+      `/api/memes/${memeToDelete._id}`
+    );
     expect(response.statusCode).toBe(200);
-    expect(response.body.mensaje).toBe("Meme eliminado correctamente🚽");
+    expect(response.body.mensaje).toBe("Meme eliminado correctamente");
   });
 
   test("should return 404 if meme is not found for deleting", async () => {
-    const response = await request(app).delete("/api/memes/999"); // ID que no existe
+    const response = await request(app).delete(
+      `/api/memes/${new mongoose.Types.ObjectId()}`
+    );
     expect(response.statusCode).toBe(404);
-    expect(response.body.error).toBe("Meme no encontrado 💩💩");
+    expect(response.body.error).toBe("Meme no encontrado");
   });
 
   // Test para la petición PUT (actualización)
@@ -107,7 +102,7 @@ describe("CRUD /api/memes", () => {
     };
 
     const response = await request(app)
-      .put(`/api/memes/${memeToUpdate.id}`)
+      .put(`/api/memes/${memeToUpdate._id}`)
       .send(updatedMeme);
     expect(response.statusCode).toBe(200);
     expect(response.body.nombre).toBe(updatedMeme.nombre);
@@ -122,7 +117,9 @@ describe("CRUD /api/memes", () => {
       url: "http://example.com/meme-updated.png",
     };
 
-    const response = await request(app).put("/api/memes/999").send(updatedMeme);
+    const response = await request(app)
+      .put(`/api/memes/${new mongoose.Types.ObjectId()}`)
+      .send(updatedMeme);
     expect(response.statusCode).toBe(404);
     expect(response.body.error).toBe("Meme no encontrado");
   });
