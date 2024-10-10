@@ -1,25 +1,32 @@
 import request from "supertest";
 import app from "../app";
-import mongoose from "mongoose"; // Asegúrate de importar mongoose para cerrar la conexión
+import connectToMongoDB from "../database/connection_db.js";
+import MinionModel from "../models/minionModels.js"; // Tu modelo de Mongoose
 
-describe("Validaciones en la creación de memes (POST /memes)", () => {
-  // Conectar a la base de datos antes de todas las pruebas
-  beforeAll(async () => {
-    const TEST_DB_URI = "mongodb://localhost:27017/miniondbtest"; // Base de datos de pruebas
-    await mongoose.connect(TEST_DB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  });
+let server;
 
-  // Limpiar la base de datos después de cada prueba para evitar datos repetidos
-  afterEach(async () => {
-    await mongoose.connection.db.dropDatabase();
-  });
+beforeAll(async () => {
+  // Conectar a la base de datos de MongoDB
+  await connectToMongoDB();
+  // Inicializa el servidor antes de las pruebas
+  server = app.listen(6000);
+});
 
-  // Test 1: Título vacío
+afterEach(async () => {
+  // Limpiamos la colección de api/api/memes después de cada prueba
+  await MinionModel.deleteMany({});
+});
+
+afterAll(async () => {
+  // Cerramos la conexión a la base de datos después de las pruebas
+  await mongoose.connection.close();
+  // Cerramos el servidor después de las pruebas
+  server.close();
+});
+
+describe("Validaciones en la creación de api/memes (POST /api/memes)", () => {
   it("Debe fallar si el título (nombre) está vacío", async () => {
-    const response = await request(app).post("/memes").send({
+    const response = await request(app).post("/api/memes").send({
       nombre: "", // Error: Título vacío
       descripcion: "Un meme gracioso",
       url: "http://example.com/meme.png",
@@ -35,9 +42,8 @@ describe("Validaciones en la creación de memes (POST /memes)", () => {
     );
   });
 
-  // Test 2: Descripción vacía
   it("Debe fallar si la descripción tiene menos de 1 o más de 200 caracteres", async () => {
-    const response = await request(app).post("/memes").send({
+    const response = await request(app).post("/api/memes").send({
       nombre: "Meme divertido",
       descripcion: "", // Error: Descripción vacía
       url: "http://example.com/meme.png",
@@ -53,9 +59,8 @@ describe("Validaciones en la creación de memes (POST /memes)", () => {
     );
   });
 
-  // Test 3: URL no válida
   it("Debe fallar si la URL no es válida", async () => {
-    const response = await request(app).post("/memes").send({
+    const response = await request(app).post("/api/memes").send({
       nombre: "Meme con URL inválida",
       descripcion: "Descripción válida",
       url: "meme-invalido", // Error: URL no válida
@@ -71,9 +76,8 @@ describe("Validaciones en la creación de memes (POST /memes)", () => {
     );
   });
 
-  // Test 4: Datos correctos
   it("Debe pasar si los datos son correctos", async () => {
-    const response = await request(app).post("/memes").send({
+    const response = await request(app).post("/api/memes").send({
       nombre: "Meme correcto",
       descripcion: "Este es un meme válido",
       url: "http://example.com/meme-correcto.png",
@@ -81,10 +85,5 @@ describe("Validaciones en la creación de memes (POST /memes)", () => {
 
     expect(response.status).toBe(201); // Código 201 creado exitosamente
     expect(response.body.nombre).toBe("Meme correcto");
-  });
-
-  // Cerrar la conexión después de todas las pruebas
-  afterAll(async () => {
-    await mongoose.connection.close();
   });
 });

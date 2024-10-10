@@ -2,30 +2,38 @@ import request from "supertest";
 import app from "../app.js"; // Asegúrate de que la ruta sea correcta
 import mongoose from "mongoose"; // Asegúrate de importar mongoose para cerrar la conexión
 import MinionModel from "../models/minionModels.js"; // Tu modelo de Mongoose
+import connectToMongoDB from "../database/connection_db.js";
 
-describe("CRUD /memes", () => {
-  // Conectar a la base de datos antes de las pruebas
-  beforeAll(async () => {
-    const TEST_DB_URI = "mongodb://localhost:27017/miniondbtest"; // Asegúrate de tener tu base de datos de pruebas
-    await mongoose.connect(TEST_DB_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
-  });
+let server;
 
-  // Limpiar la base de datos después de cada prueba
-  afterEach(async () => {
-    await MinionModel.deleteMany({});
-  });
+beforeAll(async () => {
+  // Conectar a la base de datos de MongoDB
+  await connectToMongoDB();
+});
 
-  // Cerrar la conexión a la base de datos después de todas las pruebas
-  afterAll(async () => {
-    await mongoose.connection.close();
-  });
+afterEach(async () => {
+  // Limpiamos la colección de api/memes después de cada prueba
+  await MinionModel.deleteMany({});
+});
 
-  // Test para la petición GET (listado de todos los memes)
+afterAll(async () => {
+  // Cerramos la conexión a la base de datos después de las pruebas
+  await mongoose.connection.close();
+  // Cerramos el servidor después de las pruebas
+  server.close();
+});
+
+describe("CRUD /api/memes", () => {
+  // Test para la petición GET (listado de todos los api/memes)
   test("should return a response with status 200 and type JSON", async () => {
-    const response = await request(app).get("/memes");
+    const response = await request(app).get("/api/memes");
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["content-type"]).toContain("application/json");
+  });
+
+  // Test para la petición GET (listado de todos los api/memes)
+  test("should return a response with status 200 and type JSON", async () => {
+    const response = await request(app).get("/api/memes");
     expect(response.statusCode).toBe(200);
     expect(response.headers["content-type"]).toContain("application/json");
   });
@@ -38,7 +46,7 @@ describe("CRUD /memes", () => {
       url: "http://example.com/meme.png",
     };
 
-    const response = await request(app).post("/memes").send(newMeme);
+    const response = await request(app).post("/api/memes").send(newMeme);
     expect(response.statusCode).toBe(201);
     expect(response.body.nombre).toBe(newMeme.nombre);
     expect(response.body.descripcion).toBe(newMeme.descripcion);
@@ -53,14 +61,14 @@ describe("CRUD /memes", () => {
       url: "http://example.com/meme.png",
     });
 
-    const response = await request(app).get(`/memes/${createdMeme.id}`);
+    const response = await request(app).get(`/api/memes/${createdMeme_id}`);
     expect(response.statusCode).toBe(200);
-    expect(response.body._id).toBe(String(createdMeme._id)); // Asegúrate de comparar el ID como string
+    expect(response.body._id).toBe(createdMeme_id); // Asegúrate de comparar el ID como string
     expect(response.headers["content-type"]).toContain("application/json");
   });
 
   test("should return 404 if meme is not found", async () => {
-    const response = await request(app).get("/memes/999"); // ID que no existe
+    const response = await request(app).get("/api/memes/999"); // ID que no existe
     expect(response.statusCode).toBe(404);
     expect(response.body.error).toBe("Meme no encontrado");
   });
@@ -73,13 +81,13 @@ describe("CRUD /memes", () => {
       url: "http://example.com/meme.png",
     });
 
-    const response = await request(app).delete(`/memes/${memeToDelete.id}`);
+    const response = await request(app).delete(`/api/memes/${memeToDelete.id}`);
     expect(response.statusCode).toBe(200);
     expect(response.body.mensaje).toBe("Meme eliminado correctamente🚽");
   });
 
   test("should return 404 if meme is not found for deleting", async () => {
-    const response = await request(app).delete("/memes/999"); // ID que no existe
+    const response = await request(app).delete("/api/memes/999"); // ID que no existe
     expect(response.statusCode).toBe(404);
     expect(response.body.error).toBe("Meme no encontrado 💩💩");
   });
@@ -99,7 +107,7 @@ describe("CRUD /memes", () => {
     };
 
     const response = await request(app)
-      .put(`/memes/${memeToUpdate.id}`)
+      .put(`/api/memes/${memeToUpdate.id}`)
       .send(updatedMeme);
     expect(response.statusCode).toBe(200);
     expect(response.body.nombre).toBe(updatedMeme.nombre);
@@ -114,7 +122,7 @@ describe("CRUD /memes", () => {
       url: "http://example.com/meme-updated.png",
     };
 
-    const response = await request(app).put("/memes/999").send(updatedMeme);
+    const response = await request(app).put("/api/memes/999").send(updatedMeme);
     expect(response.statusCode).toBe(404);
     expect(response.body.error).toBe("Meme no encontrado");
   });
