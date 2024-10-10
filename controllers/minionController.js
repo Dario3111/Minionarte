@@ -20,16 +20,14 @@ export const getAllMemes = async (req, res) => {
 // Crear un nuevo meme
 export const createMeme = async (req, res) => {
   try {
-    const { descripcion, url, nombre } = req.body; // Datos enviados desde el cliente
-    const newMeme = await MinionModel.create({ descripcion, url, nombre });
+    const { nombre, descripcion, url } = req.body; // Datos enviados desde el cliente
+    const newMeme = await MinionModel.create({ nombre, descripcion, url });
     res.status(201).json(newMeme); // Respuesta con el meme creado
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        error: 'Error al crear el meme ☠️☠️☠️',
-        detalles: error.message,
-      });
+    res.status(500).json({
+      error: 'Error al crear el meme ☠️☠️☠️',
+      detalles: error.message,
+    });
   }
 };
 
@@ -43,12 +41,10 @@ export const getMemeById = async (req, res) => {
     }
     res.status(200).json(meme); // Respuesta con el meme encontrado
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        error: 'Error al obtener el meme ☠️☠️☠️',
-        detalles: error.message,
-      });
+    res.status(500).json({
+      error: 'Error al obtener el meme ☠️☠️☠️',
+      detalles: error.message,
+    });
   }
 };
 
@@ -56,26 +52,24 @@ export const getMemeById = async (req, res) => {
 export const updateMeme = async (req, res) => {
   try {
     const { id } = req.params; // ID enviado en la URL
-    const { descripcion, url, nombre } = req.body; // Nuevos datos enviados desde el cliente
+    const { nombre, descripcion, url } = req.body; // Nuevos datos enviados desde el cliente
     const meme = await MinionModel.findByPk(id);
 
     if (!meme) {
       return res.status(404).json({ error: 'Meme no encontrado' });
     }
-
+    meme.nombre = nombre;
     meme.descripcion = descripcion;
     meme.url = url;
-    meme.nombre = nombre;
+
     await meme.save(); // Guarda los cambios en la base de datos
 
     res.status(200).json(meme); // Respuesta con el meme actualizado
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        error: 'Error al actualizar el meme ☠️☠️☠️',
-        detalles: error.message,
-      });
+    res.status(500).json({
+      error: 'Error al actualizar el meme ☠️☠️☠️',
+      detalles: error.message,
+    });
   }
 };
 
@@ -93,11 +87,9 @@ export const deleteMeme = async (req, res) => {
 
     res.status(200).json({ mensaje: 'Meme eliminado correctamente🚽' });
   } catch (error) {
-    res
-      .status(500)
-      .json({
-        error: 'Error al eliminar el meme ☠️☠️☠️',
-        detalles: error.message,
-      });
+    res.status(500).json({
+      error: 'Error al eliminar el meme ☠️☠️☠️',
+      detalles: error.message,
+    });
   }
 };

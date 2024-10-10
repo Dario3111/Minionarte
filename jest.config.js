@@ -1,7 +1,9 @@
-// jest.config.js
 export default {
-    testEnvironment: 'node',
-    transform: {},
-    moduleFileExtensions: ['js', 'json', 'jsx', 'node'],
-};
-
+  transform: {
+    '^.+\\.js$': 'babel-jest'
+  },
+  testEnvironment: 'node',
+  moduleNameMapper: {
+    '^(\\.{1,2}/.*)\\.js$': '$1',
+  },
+};  

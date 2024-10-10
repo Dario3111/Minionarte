@@ -1,19 +1,19 @@
+
 import { Sequelize } from 'sequelize';
 import dotenv from 'dotenv';
 
-// Cargar variables de entorno desde el archivo .env
 dotenv.config();
 
+const isTestEnv = process.env.NODE_ENV === 'test';
+
 const connection_db = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
+  isTestEnv ? process.env.TEST_DB_NAME : process.env.DB_NAME,
+  isTestEnv ? process.env.TEST_DB_USER : process.env.DB_USER,
+  isTestEnv ? process.env.TEST_DB_PASSWORD : process.env.DB_PASSWORD,
   {
-    host: process.env.DB_HOST,
-    dialect: 'mysql',
-    define: {
-      timestamps: false,
-    },
+    host: isTestEnv ? process.env.TEST_DB_HOST : process.env.DB_HOST,
+    dialect: 'mysql',  // O el motor de base de datos que estés utilizando
+    logging: isTestEnv ? false : console.log,  // Desactiva el logging en pruebas
   }
 );
 
