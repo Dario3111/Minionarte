@@ -24,20 +24,19 @@ Sigue los siguientes pasos para configurar el proyecto en tu máquina local:
    
 Navegar al directorio del proyecto:
 
-bash
-Copiar código
+```bash
 cd minionArte
+```
 Instalar las dependencias:
 
-bash
-Copiar código
+```bash
 npm install
+```
 Configurar las variables de entorno:
 
 Crea un archivo .env en la raíz del proyecto con la siguiente estructura (adaptando los valores a tu entorno):
 
-bash
-Copiar código
+```bash
 DB_NAME=nombre_de_tu_base_de_datos
 DB_USER=tu_usuario
 DB_PASSWORD=tu_contraseña
@@ -46,33 +45,35 @@ TEST_DB_NAME=test_base_de_datos
 TEST_DB_USER=test_usuario
 TEST_DB_PASSWORD=test_contraseña
 TEST_DB_HOST=localhost
+```
 Configurar y sincronizar la base de datos:
 
 Asegúrate de tener MySQL instalado y crea la base de datos que especificaste en tu archivo .env.
 
 Luego, sincroniza el modelo con la base de datos ejecutando el siguiente comando:
 
-bash
-Copiar código
+```bash
 npm run dev
+```
 La conexión y sincronización se confirmará con el mensaje: La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀
 
 Ejecutar el Proyecto
 Para iniciar el servidor en modo desarrollo:
 
-bash
-Copiar código
+```bash
 npm run dev
+```
 El servidor estará corriendo en el puerto 3000. Puedes probar el endpoint principal en tu navegador:
 
-arduino
+
 Copiar código
 http://localhost:3000
-Pruebas
+
+### Pruebas
 Este proyecto incluye pruebas unitarias e integradas para verificar la funcionalidad del CRUD y las validaciones.
 
-Para ejecutar las pruebas:
+## Para ejecutar las pruebas:
 
-bash
-Copiar código
+```bash
 npm test
+```
