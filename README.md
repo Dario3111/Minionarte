@@ -21,7 +21,6 @@ Sigue los siguientes pasos para configurar el proyecto en tu máquina local:
    
    ```bash
    git clone https://github.com/Dario3111/Minionarte.git
-   
 Navegar al directorio del proyecto:
 
 ```bash
@@ -55,7 +54,7 @@ Luego, sincroniza el modelo con la base de datos ejecutando el siguiente comando
 ```bash
 npm run dev
 ```
-La conexión y sincronización se confirmará con el mensaje: La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀
+La conexión y sincronización se confirmará con el mensaje: "La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀"
 
 Ejecutar el Proyecto
 Para iniciar el servidor en modo desarrollo:
@@ -65,17 +64,28 @@ npm run dev
 ```
 El servidor estará corriendo en el puerto 3000. Puedes probar el endpoint principal en tu navegador:
 
-
-Copiar código
 http://localhost:3000
 
-### Pruebas
+## Conexión con el Frontend
+Para conectar el frontend al backend de minionArte, sigue estos pasos:
+
+Clonar el repositorio del frontend desde GitHub:
+
+```bash
+git clone https://github.com/Yedpt/musenion.git
+```
+Asegúrate de que en la carpeta MinionServices.js dentro del frontend esté configurado el siguiente código para la conexión con el backend:
+```bash
+const URL = "http://localhost:8000/api/memes";
+```
+Este URL se utilizará para conectarse al backend de minionArte.
+
+Pruebas
 Este proyecto incluye pruebas unitarias e integradas para verificar la funcionalidad del CRUD y las validaciones.
 
-## Para ejecutar las pruebas:
-
+Para ejecutar las pruebas:
 ```bash
 npm test
 ```
-## Desarrolladores:
+### Desarrolladores:
 Veida Velásquez, César Mercado, Jenny Tello, Dario Pacheco.
