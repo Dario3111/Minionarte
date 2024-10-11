@@ -77,3 +77,5 @@ Este proyecto incluye pruebas unitarias e integradas para verificar la funcional
 ```bash
 npm test
 ```
+## Desarrolladores:
+Veida Velásquez, César Mercado, Jenny Tello, Dario Pacheco.
