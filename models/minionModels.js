@@ -1,43 +1,30 @@
-import connection_db from '../database/connection_db.js';
-import { DataTypes } from 'sequelize';
+import { ObjectId } from 'mongodb';
 
-const MinionModel = connection_db.define(
-  'Meme',  // Nombre del modelo, que corresponde a la tabla 'memes'
-  {
-    id: {
-      type: DataTypes.BIGINT.UNSIGNED,
-      autoIncrement: true,
-      primaryKey: true,
-    },
-    nombre: {
-      type: DataTypes.STRING (50),
-      allowNull: false,
-      validate: {
-        notEmpty: { msg: 'El título no puede estar vacío' },
-        len: { args: [1, 50], msg: 'El título debe tener entre 1 y 50 caracteres' },
-    },
-  },
-    descripcion: {
-      type: DataTypes.STRING(200),
-      allowNull: false, 
-      validate: {
-        notEmpty: { msg: 'La descripción no puede estar vacía' },
-        len: { args: [1, 200], msg: 'La descripción debe tener entre 1 y 200 caracteres' },
-      },
-    },
-    url: {
-      type: DataTypes.STRING(2083),  // Tamaño máximo de URL para imagen
-      allowNull: false, 
-      validate: {
-        notEmpty: { msg: 'La URL de la imagen no puede estar vacía' },
-        isUrl: { msg: 'Debe ser una URL válida' },
-    },
-  },
-},
-  {
-    timestamps: false,  // Deshabilita los timestamps automáticos
-    tableName: 'memes',  // Especifica explícitamente el nombre de la tabla
-  }
-);
+const MINION_COLLECTION = 'minions'; // Cambia esto si tu colección tiene otro nombre
 
-export default MinionModel;
+// Obtener todos los memes
+export const findAll = async (db) => {
+  return await db.collection(MINION_COLLECTION).find({}).toArray();
+};
+
+// Crear un nuevo meme
+export const create = async (db, data) => {
+  const result = await db.collection(MINION_COLLECTION).insertOne(data);
+  return result.ops[0]; // Retorna el documento creado
+};
+
+// Obtener un meme por ID
+export const findById = async (db, id) => {
+  return await db.collection(MINION_COLLECTION).findOne({ _id: new ObjectId(id) });
+};
+
+// Actualizar un meme
+export const update = async (db, id, data) => {
+  await db.collection(MINION_COLLECTION).updateOne({ _id: new ObjectId(id) }, { $set: data });
+  return findById(db, id); // Retorna el documento actualizado
+};
+
+// Eliminar un meme
+export const remove = async (db, id) => {
+  await db.collection(MINION_COLLECTION).deleteOne({ _id: new ObjectId(id) });
+};

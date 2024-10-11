@@ -1,53 +1,41 @@
-import express from "express";
-import {
-    getAllMemes,
-    getMemeById,
-    createMeme,
-    updateMeme,
-    deleteMeme,
-} from "../controllers/minionController.js";
-import { validateCreateMeme, validateUpdateMeme } from '../validators/memeValidator.js'; // Importa las validaciones
-import { validationResult } from 'express-validator';
+import { MongoClient } from 'mongodb';
+import express from 'express';
+import cors from 'cors';
+import router from './routers/router.js';
 
-const router = express.Router();
+const app = express();
+const uri = 'mongodb://localhost:27017'; // Cambia si necesitas una URL diferente
+const dbName = 'miBaseDeDatos'; // Cambia al nombre de tu base de datos
+let db; // Variable para la base de datos
 
-// Obtener todos los memes
-router.get("/memes", getAllMemes);
+app.use(cors());
+app.use(express.json());
 
-// Crear un meme con validaciones
-router.post(
-  "/memes",
-  validateCreateMeme,  // Aplicar validaciones para crear un meme
-  (req, res, next) => {
-    // Manejo de los errores de validación
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next(); // Si no hay errores, continúa con el controlador
-  },
-  createMeme
-);
+// Middleware para agregar la conexión de la base de datos a las solicitudes
+app.use((req, res, next) => {
+  req.db = db; // Asignamos la conexión a `req`
+  next(); // Pasar al siguiente middleware
+});
 
-// Obtener un meme por ID
-router.get("/memes/:id", getMemeById);
+app.get('/', (req, res) => {
+  res.send('Hola Caracola');
+});
 
-// Actualizar un meme con validaciones
-router.put(
-  "/memes/:id",
-  validateUpdateMeme,  // Aplicar validaciones para actualizar un meme
-  (req, res, next) => {
-    // Manejo de los errores de validación
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next(); // Si no hay errores, continúa con el controlador
-  },
-  updateMeme
-);
+app.use('/', router);
 
-// Eliminar un meme
-router.delete("/memes/:id", deleteMeme);
+// Función para conectar a la base de datos
+export async function initializeDatabase() {
+  const client = new MongoClient(uri, { useUnifiedTopology: true });
+  
+  try {
+    await client.connect();
+    console.log('La conexión se ha establecido exitosamente.🚀🧙‍♂️🚀');
 
-export default router;
+    db = client.db(dbName); // Inicializa la base de datos
+    console.log('Conectado a la base de datos:', dbName);
+  } catch (error) {
+    console.error('No se pudo conectar a la base de datosㄟ(≧◇≦)ㄏ:', error);
+  }
+}
+
+export default app; 
