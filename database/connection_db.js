@@ -6,7 +6,7 @@ dotenv.config();
 const dbURI =
   process.env.NODE_ENV === "test"
     ? process.env.TEST_DB_URI
-    : process.env.DB_URI;
+    : process.env.MONGO_URI;
 
 const connectDB = async () => {
   try {
